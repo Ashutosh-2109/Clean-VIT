@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean VIT - Hostel Room Cleaning Portal</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-green-500: rgba(34, 197, 94, 1);
+
+            --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-20);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--color-cream-50);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: var(--space-32);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: var(--space-32);
+        }
+
+        .logo {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--color-teal-600);
+            margin-bottom: var(--space-12);
+        }
+
+        .subtitle {
+            color: var(--color-slate-500);
+            font-size: var(--font-size-lg);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-16);
+            margin-bottom: var(--space-20);
+        }
+
+        .btn {
+            padding: var(--space-16) var(--space-20);
+            border: none;
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--color-teal-500);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-teal-600);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--color-gray-200);
+            color: var(--color-slate-900);
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-gray-300);
+        }
+
+        .btn-back {
+            background: var(--color-gray-300);
+            color: var(--color-slate-900);
+            padding: var(--space-12) var(--space-20);
+            font-size: var(--font-size-base);
+            margin-bottom: var(--space-20);
+        }
+
+        .btn-back:hover {
+            background: var(--color-gray-400);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-20);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-8);
+            font-weight: 600;
+            color: var(--color-slate-900);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--space-12);
+            border: 2px solid var(--color-gray-300);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-base);
+            font-family: var(--font-family-base);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-teal-500);
+            box-shadow: 0 0 0 3px rgba(33, 128, 141, 0.1);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        .blocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: var(--space-8);
+            margin-bottom: var(--space-20);
+        }
+
+        .block-btn {
+            padding: var(--space-12);
+            border: 2px solid var(--color-gray-300);
+            background: white;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: var(--font-size-base);
+        }
+
+        .block-btn:hover {
+            border-color: var(--color-teal-500);
+            background: var(--color-gray-200);
+        }
+
+        .block-btn.selected {
+            background: var(--color-teal-500);
+            color: white;
+            border-color: var(--color-teal-500);
+        }
+
+        .cleaning-task {
+            background: var(--color-gray-200);
+            padding: var(--space-16);
+            border-radius: var(--radius-base);
+            margin-bottom: var(--space-16);
+            border-left: 4px solid var(--color-teal-500);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-8);
+        }
+
+        .task-room {
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+            color: var(--color-slate-900);
+        }
+
+        .task-status {
+            display: inline-block;
+            padding: var(--space-6) var(--space-12);
+            border-radius: 20px;
+            font-size: var(--font-size-base);
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(255, 84, 89, 0.2);
+            color: var(--color-red-400);
+        }
+
+        .status-inprogress {
+            background: rgba(230, 129, 97, 0.2);
+            color: var(--color-orange-400);
+        }
+
+        .status-completed {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--color-green-500);
+        }
+
+        .status-approved {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--color-green-500);
+        }
+
+        .status-rejected {
+            background: rgba(255, 84, 89, 0.2);
+            color: var(--color-red-400);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: var(--space-8);
+            margin-top: var(--space-12);
+        }
+
+        .btn-sm {
+            padding: var(--space-8) var(--space-12);
+            font-size: var(--font-size-sm);
+            border: none;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-update {
+            background: var(--color-teal-500);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-update:hover {
+            background: var(--color-teal-600);
+        }
+
+        .btn-delete {
+            background: var(--color-red-400);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-delete:hover {
+            background: #d9484d;
+        }
+
+        .message {
+            padding: var(--space-12);
+            border-radius: var(--radius-base);
+            margin-bottom: var(--space-16);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .message-success {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--color-green-500);
+        }
+
+        .message-error {
+            background: rgba(255, 84, 89, 0.2);
+            color: var(--color-red-400);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-12);
+            margin-bottom: var(--space-20);
+        }
+
+        .stat-card {
+            background: var(--color-gray-200);
+            padding: var(--space-12);
+            border-radius: var(--radius-base);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            color: var(--color-teal-600);
+        }
+
+        .stat-label {
+            font-size: var(--font-size-sm);
+            color: var(--color-slate-500);
+            margin-top: var(--space-4);
+        }
+
+        .timeline {
+            font-size: var(--font-size-sm);
+            color: var(--color-slate-500);
+            margin-top: var(--space-12);
+            padding-top: var(--space-12);
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .timeline-item {
+            margin-bottom: var(--space-8);
+            padding-left: var(--space-12);
+            border-left: 2px solid var(--color-teal-500);
+            padding-top: var(--space-4);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: var(--space-20);
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .blocks-grid {
+                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HOME SECTION -->
+        <div id="homeSection" class="section active">
+            <div class="header">
+                <div class="logo">🏠 Clean VIT</div>
+                <p class="subtitle">Smart Hostel Cleaning Management</p>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="goToStudentPortal()">
+                    👤 Student Portal
+                </button>
+                <button class="btn btn-primary" onclick="goToCleanerPortal()">
+                    🧹 Cleaner Portal
+                </button>
+            </div>
+        </div>
+
+        <!-- STUDENT PORTAL -->
+        <div id="studentSection" class="section">
+            <button class="btn btn-back" onclick="backToHome()">← Back</button>
+            
+            <div class="header">
+                <div class="logo">Student Portal</div>
+            </div>
+
+            <div id="studentMessage"></div>
+
+            <!-- STUDENT LOGIN -->
+            <div id="studentLoginForm">
+                <div class="form-group">
+                    <label class="form-label">Student ID</label>
+                    <input type="text" id="studentId" class="form-control" placeholder="e.g., S001" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="studentPassword" class="form-control" placeholder="Enter password" />
+                </div>
+                <button class="btn btn-primary" onclick="loginStudent()">Login</button>
+            </div>
+
+            <!-- STUDENT DASHBOARD -->
+            <div id="studentDashboard" style="display: none;">
+                <h2 style="margin-bottom: var(--space-16); color: var(--color-slate-900);">My Cleaning Requests</h2>
+                <div id="studentRequestsList" style="margin-bottom: var(--space-20);"></div>
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: var(--space-12);" onclick="goToRequestNew()">+ New Cleaning Request</button>
+                <button class="btn btn-back" onclick="logoutStudent()">← Logout</button>
+            </div>
+
+            <!-- NEW REQUEST FORM -->
+            <div id="newRequestView" style="display: none;">
+                <button class="btn btn-back" onclick="backToDashboard()">← Back to Dashboard</button>
+                <h3 style="margin-bottom: var(--space-16); color: var(--color-slate-900);">Request New Cleaning</h3>
+
+                <!-- HOSTEL SELECTION -->
+                <div id="hostelSelection" style="display: block;">
+                    <h4 style="margin-bottom: var(--space-16); color: var(--color-slate-900);">Select Your Hostel Type</h4>
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="selectHostelType('ladies')">
+                            👩 Ladies Hostel
+                        </button>
+                        <button class="btn btn-secondary" onclick="selectHostelType('mens')">
+                            👨 Men's Hostel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BLOCK SELECTION -->
+                <div id="blockSelection" style="display: none;">
+                    <h4 style="margin-bottom: var(--space-16); color: var(--color-slate-900);">Select Your Block</h4>
+                    <div class="blocks-grid" id="blockGrid"></div>
+                    <button class="btn btn-back" onclick="resetHostelType()">← Change Hostel</button>
+                </div>
+
+                <!-- ROOM NUMBER INPUT -->
+                <div id="roomInput" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Enter Your Room Number</label>
+                        <input type="text" id="roomNumber" class="form-control" placeholder="e.g., 101, 202" />
+                    </div>
+                    <button class="btn btn-primary" onclick="submitCleaningRequest()">Request Cleaning</button>
+                    <button class="btn btn-back" onclick="resetBlockSelection()">← Change Block</button>
+                </div>
+
+                <!-- CONFIRMATION -->
+                <div id="confirmationMessage" style="display: none;">
+                    <div style="text-align: center; padding: var(--space-32);">
+                        <div style="font-size: 48px; margin-bottom: var(--space-16);">✅</div>
+                        <h3 style="color: var(--color-slate-900); margin-bottom: var(--space-12);">Cleaning Request Submitted!</h3>
+                        <p style="color: var(--color-slate-500); margin-bottom: var(--space-24);">Your room will be cleaned soon. Check your dashboard for updates.</p>
+                        <button class="btn btn-primary" onclick="backToDashboard()">← Back to Dashboard</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLEANER PORTAL -->
+        <div id="cleanerSection" class="section">
+            <button class="btn btn-back" onclick="backToHome()">← Back</button>
+            
+            <div class="header">
+                <div class="logo">Cleaner Portal</div>
+            </div>
+
+            <div id="cleanerMessage"></div>
+
+            <!-- CLEANER LOGIN -->
+            <div id="cleanerLogin">
+                <div class="form-group">
+                    <label class="form-label">Cleaner ID</label>
+                    <input type="text" id="cleanerId" class="form-control" placeholder="e.g., C001" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="cleanerPassword" class="form-control" placeholder="Enter password" />
+                </div>
+                <button class="btn btn-primary" onclick="loginCleaner()">Login</button>
+            </div>
+
+            <!-- TASKS DASHBOARD -->
+            <div id="tasksDashboard" style="display: none;">
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingCount">0</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="inProgressCount">0</div>
+                        <div class="stat-label">In Progress</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedCount">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: var(--space-20);">
+                    <label class="form-label">Filter by Status</label>
+                    <select class="form-control" id="statusFilter" onchange="filterTasks()">
+                        <option value="all">All Tasks</option>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+
+                <div id="tasksList"></div>
+
+                <button class="btn btn-back" onclick="logoutCleaner()">← Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === DATA STORAGE ===
+        let currentHostelType = null;
+        let currentBlock = null;
+        let currentCleanerId = null;
+        let currentStudentId = null;
+
+        const studentAccounts = {
+            'S001': 'pass123',
+            'S002': 'pass456',
+            'S003': 'pass789'
+        };
+        
+        const cleaners = {
+            'C001': { name: 'Rajesh Kumar', hostelType: 'mens', password: 'clean001' },
+            'C002': { name: 'Suresh Singh', hostelType: 'mens', password: 'clean002' },
+            'C003': { name: 'Priya Sharma', hostelType: 'ladies', password: 'clean003' },
+            'C004': { name: 'Anjali Gupta', hostelType: 'ladies', password: 'clean004' }
+        };
+
+        const blocksData = {
+            ladies: ['A', 'B', 'C', 'D', 'E', 'F'],
+            mens: ['G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T']
+        };
+
+        // === NAVIGATION ===
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function goToStudentPortal() {
+            showSection('studentSection');
+        }
+
+        function goToCleanerPortal() {
+            showSection('cleanerSection');
+        }
+
+        function backToHome() {
+            showSection('homeSection');
+            resetForm();
+        }
+
+        function resetForm() {
+            currentHostelType = null;
+            currentBlock = null;
+            document.getElementById('studentMessage').innerHTML = '';
+        }
+
+        function goToRequestNew() {
+            document.getElementById('studentDashboard').style.display = 'none';
+            document.getElementById('newRequestView').style.display = 'block';
+            document.getElementById('hostelSelection').style.display = 'block';
+            document.getElementById('blockSelection').style.display = 'none';
+            document.getElementById('roomInput').style.display = 'none';
+            document.getElementById('confirmationMessage').style.display = 'none';
+        }
+
+        function backToDashboard() {
+            document.getElementById('newRequestView').style.display = 'none';
+            document.getElementById('studentDashboard').style.display = 'block';
+            loadStudentRequests();
+        }
+
+        // === STUDENT PORTAL ===
+        function loginStudent() {
+            const studentId = document.getElementById('studentId').value.trim().toUpperCase();
+            const password = document.getElementById('studentPassword').value.trim();
+
+            if (!studentAccounts[studentId] || studentAccounts[studentId] !== password) {
+                showMessage('studentMessage', 'Invalid Student ID or Password', 'error');
+                return;
+            }
+
+            currentStudentId = studentId;
+            document.getElementById('studentLoginForm').style.display = 'none';
+            document.getElementById('studentDashboard').style.display = 'block';
+            document.getElementById('newRequestView').style.display = 'none';
+            showMessage('studentMessage', `Welcome, ${studentId}!`, 'success');
+            loadStudentRequests();
+        }
+
+        function logoutStudent() {
+            currentStudentId = null;
+            document.getElementById('studentLoginForm').style.display = 'block';
+            document.getElementById('studentDashboard').style.display = 'none';
+            document.getElementById('newRequestView').style.display = 'none';
+            document.getElementById('studentId').value = '';
+            document.getElementById('studentPassword').value = '';
+            document.getElementById('studentMessage').innerHTML = '';
+        }
+
+        function selectHostelType(type) {
+            currentHostelType = type;
+            document.getElementById('hostelSelection').style.display = 'none';
+            document.getElementById('blockSelection').style.display = 'block';
+            renderBlockGrid();
+        }
+
+        function renderBlockGrid() {
+            const blocks = blocksData[currentHostelType];
+            const blockGrid = document.getElementById('blockGrid');
+            blockGrid.innerHTML = blocks.map(block => 
+                `<button class="block-btn" onclick="selectBlock('${block}')">${block}</button>`
+            ).join('');
+        }
+
+        function selectBlock(block) {
+            currentBlock = block;
+            document.getElementById('blockSelection').style.display = 'none';
+            document.getElementById('roomInput').style.display = 'block';
+            document.getElementById('roomNumber').focus();
+        }
+
+        function resetHostelType() {
+            currentHostelType = null;
+            currentBlock = null;
+            document.getElementById('hostelSelection').style.display = 'block';
+            document.getElementById('blockSelection').style.display = 'none';
+        }
+
+        function resetBlockSelection() {
+            currentBlock = null;
+            document.getElementById('blockSelection').style.display = 'block';
+            document.getElementById('roomInput').style.display = 'none';
+            document.getElementById('roomNumber').value = '';
+        }
+
+        function submitCleaningRequest() {
+            const roomNumber = document.getElementById('roomNumber').value.trim();
+            
+            if (!roomNumber) {
+                showMessage('studentMessage', 'Please enter room number', 'error');
+                return;
+            }
+
+            if (!/^\d+$/.test(roomNumber) || roomNumber.length > 3) {
+                showMessage('studentMessage', 'Invalid room number', 'error');
+                return;
+            }
+
+            const request = {
+                id: Date.now().toString(),
+                roomNumber: roomNumber,
+                block: currentBlock,
+                hostelType: currentHostelType === 'ladies' ? 'Ladies' : 'Men\'s',
+                status: 'pending',
+                studentId: currentStudentId,
+                timestamp: new Date().toLocaleString(),
+                requestedAt: new Date().getTime(),
+                assignedCleaner: null,
+                assignedAt: null,
+                startedAt: null,
+                completedAt: null,
+                approvedAt: null,
+                approvedBy: null,
+                rejectedAt: null,
+                rejectedBy: null
+            };
+
+            fetch('/api/requests', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(request)
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('roomInput').style.display = 'none';
+                document.getElementById('confirmationMessage').style.display = 'block';
+            })
+            .catch(err => {
+                showMessage('studentMessage', 'Error creating request. Try again.', 'error');
+            });
+        }
+
+        function loadStudentRequests() {
+            fetch('/api/requests')
+            .then(res => res.json())
+            .then(allRequests => {
+                const studentRequests = allRequests.filter(r => r.studentId === currentStudentId);
+                const requestsList = document.getElementById('studentRequestsList');
+
+                if (studentRequests.length === 0) {
+                    requestsList.innerHTML = '<p style="text-align: center; color: var(--color-slate-500); padding: var(--space-20);">No requests yet</p>';
+                    return;
+                }
+
+                requestsList.innerHTML = studentRequests.map(req => `
+                    <div class="cleaning-task">
+                        <div class="task-header">
+                            <div>
+                                <div class="task-room">Block ${req.block} - Room ${req.roomNumber}</div>
+                                <small style="color: var(--color-slate-500);">Requested: ${req.timestamp}</small>
+                            </div>
+                            <span class="task-status status-${req.status.replace('-', '')}">${req.status.toUpperCase()}</span>
+                        </div>
+                        <div class="timeline">
+                            ${req.assignedCleaner ? `<div class="timeline-item">✓ Assigned to <strong>${req.assignedCleaner}</strong></div>` : ''}
+                            ${req.startedAt ? `<div class="timeline-item">🧹 Started cleaning</div>` : ''}
+                            ${req.completedAt ? `<div class="timeline-item">✅ Cleaning completed</div>` : ''}
+                            ${req.approvedAt ? `<div class="timeline-item" style="color: var(--color-green-500);">✓ Approved by you</div>` : ''}
+                            ${req.rejectedAt ? `<div class="timeline-item" style="color: var(--color-red-400);">✗ Rejected by you</div>` : ''}
+                        </div>
+                        ${req.status === 'completed' && !req.approvedAt && !req.rejectedAt ? `
+                            <div style="margin-top: var(--space-12); display: flex; gap: var(--space-8);">
+                                <button class="btn-sm btn-update" style="flex: 1; background: var(--color-green-500);" onclick="approveRequest('${req.id}')">✓ Approve</button>
+                                <button class="btn-sm btn-delete" style="flex: 1;" onclick="rejectRequest('${req.id}')">✗ Reject</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+            })
+            .catch(err => console.error('Error loading requests:', err));
+        }
+
+        function approveRequest(requestId) {
+            fetch(`/api/requests/${requestId}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'approved' })
+            })
+            .then(res => res.json())
+            .then(data => {
+                showMessage('studentMessage', 'Cleaning approved! Thank you.', 'success');
+                loadStudentRequests();
+            })
+            .catch(err => showMessage('studentMessage', 'Error approving request', 'error'));
+        }
+
+        function rejectRequest(requestId) {
+            if (confirm('Are you sure? This will mark the cleaning as rejected.')) {
+                fetch(`/api/requests/${requestId}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'rejected' })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    showMessage('studentMessage', 'Cleaning marked as rejected.', 'error');
+                    loadStudentRequests();
+                })
+                .catch(err => showMessage('studentMessage', 'Error rejecting request', 'error'));
+            }
+        }
+
+        // === CLEANER PORTAL ===
+        function loginCleaner() {
+            const cleanerId = document.getElementById('cleanerId').value.trim().toUpperCase();
+            const password = document.getElementById('cleanerPassword').value.trim();
+
+            if (!cleaners[cleanerId] || cleaners[cleanerId].password !== password) {
+                showMessage('cleanerMessage', 'Invalid Cleaner ID or Password', 'error');
+                return;
+            }
+
+            currentCleanerId = cleanerId;
+            document.getElementById('cleanerLogin').style.display = 'none';
+            document.getElementById('tasksDashboard').style.display = 'block';
+            showMessage('cleanerMessage', `Welcome, ${cleaners[cleanerId].name}!`, 'success');
+            loadTasks();
+        }
+
+        function loadTasks() {
+            updateStats();
+            filterTasks();
+        }
+
+        function updateStats() {
+            fetch('/api/requests')
+            .then(res => res.json())
+            .then(allRequests => {
+                const cleanerHostelType = cleaners[currentCleanerId].hostelType;
+                const assignedTasks = allRequests.filter(r => 
+                    (cleanerHostelType === 'mens' && r.hostelType === 'Men\'s') ||
+                    (cleanerHostelType === 'ladies' && r.hostelType === 'Ladies')
+                );
+
+                document.getElementById('pendingCount').textContent = 
+                    assignedTasks.filter(t => t.status === 'pending').length;
+                document.getElementById('inProgressCount').textContent = 
+                    assignedTasks.filter(t => t.status === 'in-progress').length;
+                document.getElementById('completedCount').textContent = 
+                    assignedTasks.filter(t => t.status === 'completed').length;
+            });
+        }
+
+        function filterTasks() {
+            const filterValue = document.getElementById('statusFilter').value;
+            
+            fetch('/api/requests')
+            .then(res => res.json())
+            .then(allRequests => {
+                const cleanerHostelType = cleaners[currentCleanerId].hostelType;
+                let tasks = allRequests.filter(r => 
+                    (cleanerHostelType === 'mens' && r.hostelType === 'Men\'s') ||
+                    (cleanerHostelType === 'ladies' && r.hostelType === 'Ladies')
+                );
+
+                if (filterValue !== 'all') {
+                    tasks = tasks.filter(t => t.status === filterValue);
+                }
+
+                tasks.sort((a, b) => {
+                    const statusOrder = { 'pending': 0, 'in-progress': 1, 'completed': 2 };
+                    return statusOrder[a.status] - statusOrder[b.status];
+                });
+
+                renderTasksList(tasks);
+            });
+        }
+
+        function renderTasksList(tasks) {
+            const tasksList = document.getElementById('tasksList');
+            
+            if (tasks.length === 0) {
+                tasksList.innerHTML = '<p style="text-align: center; color: var(--color-slate-500); padding: var(--space-20);">No tasks available</p>';
+                return;
+            }
+
+            tasksList.innerHTML = tasks.map(task => `
+                <div class="cleaning-task">
+                    <div class="task-header">
+                        <div>
+                            <div class="task-room">Block ${task.block} - Room ${task.roomNumber}</div>
+                            <small style="color: var(--color-slate-500);">Student: ${task.studentId}</small>
+                        </div>
+                        <span class="task-status status-${task.status.replace('-', '')}">${task.status.toUpperCase()}</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item">📋 Requested: ${task.timestamp}</div>
+                        ${task.startedAt ? `<div class="timeline-item">🧹 Started cleaning</div>` : ''}
+                        ${task.completedAt ? `<div class="timeline-item">✅ Completed: ${task.completedAt}</div>` : ''}
+                    </div>
+                    <div class="task-actions">
+                        ${task.status === 'pending' ? `
+                            <button class="btn-sm btn-update" onclick="updateTaskStatus('${task.id}', 'in-progress')">Start Cleaning</button>
+                        ` : ''}
+                        ${task.status === 'in-progress' ? `
+                            <button class="btn-sm btn-update" onclick="updateTaskStatus('${task.id}', 'completed')">Mark Complete</button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTaskStatus(taskId, newStatus) {
+            fetch(`/api/requests/${taskId}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                loadTasks();
+            })
+            .catch(err => console.error('Error updating task:', err));
+        }
+
+        function logoutCleaner() {
+            currentCleanerId = null;
+            document.getElementById('cleanerLogin').style.display = 'block';
+            document.getElementById('tasksDashboard').style.display = 'none';
+            document.getElementById('cleanerId').value = '';
+            document.getElementById('cleanerPassword').value = '';
+            document.getElementById('cleanerMessage').innerHTML = '';
+        }
+
+        // === UTILITIES ===
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="message message-${type}">${message}</div>`;
+            setTimeout(() => {
+                element.innerHTML = '';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

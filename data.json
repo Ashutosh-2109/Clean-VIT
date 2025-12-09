@@ -1,0 +1,38 @@
+{
+  "cleaningRequests": [
+    {
+      "id": "1765296790559",
+      "hostelType": "Men's",
+      "block": "P",
+      "roomNumber": "461",
+      "studentId": "S001",
+      "status": "approved",
+      "timestamp": "2025-12-09T16:13:10.560Z",
+      "assignedCleaner": null,
+      "assignedAt": null,
+      "startedAt": "2025-12-09T16:14:14.794Z",
+      "completedAt": "2025-12-09T16:14:16.870Z",
+      "approvedAt": "2025-12-09T16:15:19.065Z",
+      "approvedBy": null,
+      "rejectedAt": null,
+      "rejectedBy": null
+    },
+    {
+      "id": "1765297031870",
+      "hostelType": "Men's",
+      "block": "P",
+      "roomNumber": "461",
+      "studentId": "S001",
+      "status": "completed",
+      "timestamp": "2025-12-09T16:17:11.870Z",
+      "assignedCleaner": null,
+      "assignedAt": null,
+      "startedAt": "2025-12-09T16:17:52.451Z",
+      "completedAt": "2025-12-09T16:17:53.612Z",
+      "approvedAt": null,
+      "approvedBy": null,
+      "rejectedAt": null,
+      "rejectedBy": null
+    }
+  ]
+}
